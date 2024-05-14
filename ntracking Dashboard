@@ -182,7 +182,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total nodes running",
+      "title": "Nodes Running",
       "transformations": [
         {
           "id": "calculateField",
@@ -260,7 +260,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total nodes Killed",
+      "title": "Nodes Killed",
       "transformations": [
         {
           "id": "calculateField",
@@ -377,6 +377,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "bargauge"
     },
     {
@@ -440,7 +441,7 @@
           "refId": "A"
         }
       ],
-      "title": "Host earnings in Dirvines",
+      "title": "Host Earnings",
       "transformations": [
         {
           "id": "renameByRegex",
@@ -471,6 +472,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "gauge"
     },
     {
@@ -562,7 +564,7 @@
           "refId": "A"
         }
       ],
-      "title": "Average node errors",
+      "title": "Node Errors",
       "transformations": [
         {
           "id": "renameByRegex",
@@ -613,7 +615,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#299c46"
+                "color": "#299c46",
+                "value": null
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -718,7 +721,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#299c46"
+                "color": "#299c46",
+                "value": null
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -820,7 +824,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "green",
@@ -897,7 +902,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "green",
@@ -973,7 +979,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1036,7 +1043,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1099,7 +1107,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1220,7 +1229,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1387,7 +1397,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1515,7 +1526,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1557,7 +1569,7 @@
           "refId": "A"
         }
       ],
-      "title": "Node earnings in Dirvines",
+      "title": "Node Earnings",
       "transformations": [
         {
           "id": "renameByRegex",
@@ -1637,7 +1649,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1678,7 +1691,7 @@
           "refId": "A"
         }
       ],
-      "title": "Node Errors",
+      "title": "Considered Bad",
       "transformations": [
         {
           "id": "renameByRegex",
@@ -1739,7 +1752,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2034,6 +2048,6 @@
   "timezone": "browser",
   "title": "Dashboard",
   "uid": "7JdIffTn9z",
-  "version": 3,
+  "version": 5,
   "weekStart": ""
 }
