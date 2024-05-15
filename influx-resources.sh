@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# if cpu over 90% exit monitoring script
+cpu=$(awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) ; }' \
+<(grep 'cpu ' /proc/stat) <(sleep 1;grep 'cpu ' /proc/stat))
+if [ 1 -eq "$(echo "$cpu > 90.0" | bc)" ]; then exit 0; fi
+
 # Environment setup
 export PATH=$PATH:$HOME/.local/bin
 base_dir="/var/safenode-manager/services"
@@ -69,45 +74,18 @@ done
 # Output
 echo "nodes_totals rewards=$total_rewards_balance,nodes_running="$total_nodes_running"i,nodes_killed="$total_nodes_killed"i $influx_time"
 
-
 # Latency
 latency=$(ping -c 4 8.8.8.8 | tail -1| awk '{print $4}' | cut -d '/' -f 2)
 echo "nodes latency=$latency $influx_time"
 
-#grep a errors from all node logs from last 5 min to a combined file
-grep "$(date "+%Y-%m-%dT%H:%M" -d '5 min ago')" /var/log/safenode/safenode*/safenode.log | grep "error" > /tmp/influx-resources/combined_logs
+# Grep for "us as BAD" in the logs from the last 24 hours and count occurrences
+bad_occurrences=$(grep -r "$current_date" /var/log/safenode/ | grep "us as BAD" | wc -l)
 
-#grep for errors with two sting patterns
-OutgoingConnectionError_HandshakeTimedOut=$(grep -E 'OutgoingConnectionError|HandshakeTimedOut' /tmp/influx-resources/combined_logs  | wc -l)
-OutgoingConnectionError_ResourceLimitExceeded=$(grep -E 'OutgoingConnectionError|ResourceLimitExceeded' /tmp/influx-resources/combined_logs  | wc -l)
-OutgoingConnectionError_NoReservation=$(grep -E 'OutgoingConnectionError|NoReservation' /tmp/influx-resources/combined_logs  | wc -l)
-IncomingConnectionError_HandshakeTimedOut=$(grep -E 'IncomingConnectionError|HandshakeTimedOut' /tmp/influx-resources/combined_logs  | wc -l)
-IncomingConnectionError_ConnectionClose=$(grep -E 'IncomingConnectionError|ConnectionClose' /tmp/influx-resources/combined_logs  | wc -l)
-OutgoingTransport_Canceled=$(grep -E 'OutgoingTransport|Canceled' /tmp/influx-resources/combined_logs  | wc -l)
-OutgoingTransport_NoReservation=$(grep -E 'OutgoingTransport|NoReservation' /tmp/influx-resources/combined_logs  | wc -l)
-OutgoingTransport_ResourceLimitExceeded=$(grep -E 'OutgoingTransport|ResourceLimitExceeded' /tmp/influx-resources/combined_logs  | wc -l)
-OutgoingTransport_HandshakeTimedOut=$(grep -E 'OutgoingTransport|HandshakeTimedOut' /tmp/influx-resources/combined_logs  | wc -l)
-Problematic_HandshakeTimedOut=$(grep -E 'Problematic|HandshakeTimedOut' /tmp/influx-resources/combined_logs  | wc -l)
+# Print the result to influx
+echo "nodes_errors us_as_BAD_count="$bad_occurrences"i $influx_time"
 
-Total_Errors=$(($OutgoingConnectionError_HandshakeTimedOut + $OutgoingConnectionError_ResourceLimitExceeded + $OutgoingConnectionError_NoReservation + $IncomingConnectionError_HandshakeTimedOut + $IncomingConnectionError_ConnectionClose + $OutgoingTransport_Canceled + $OutgoingTransport_NoReservation + $OutgoingTransport_ResourceLimitExceeded + $OutgoingTransport_HandshakeTimedOut + $Problematic_HandshakeTimedOut))
-Average_Errors=$(($Total_Errors / $total_nodes_running))
-
-#print to influx
-echo "nodes_errors \
-OutgoingConnectionError_HandshakeTimedOut="$OutgoingConnectionError_HandshakeTimedOut"i,\
-OutgoingConnectionError_ResourceLimitExceeded="$OutgoingConnectionError_ResourceLimitExceeded"i,\
-OutgoingConnectionError_NoReservation="$OutgoingConnectionError_NoReservation"i,\
-IncomingConnectionError_HandshakeTimedOut="$IncomingConnectionError_HandshakeTimedOut"i,\
-IncomingConnectionError_ConnectionClose="$IncomingConnectionError_ConnectionClose"i,\
-OutgoingTransport_Canceled="$OutgoingTransport_Canceled"i,\
-OutgoingTransport_NoReservation="$OutgoingTransport_NoReservation"i,\
-OutgoingTransport_ResourceLimitExceeded="$OutgoingTransport_ResourceLimitExceeded"i,\
-OutgoingTransport_HandshakeTimedOut="$OutgoingTransport_HandshakeTimedOut"i,\
-Problematic_HandshakeTimedOut="$Problematic_HandshakeTimedOut"i,\
-Average_Errors=$Average_Errors \
-$influx_time"
-
-# calculate total storage of the node services folder
+# Calculate total storage of the node services folder
 total_disk=$(echo "scale=0;("$(du -s "$base_dir" | cut -f1)")/1024" | bc)
 echo "nodes_totals total_disk="$total_disk"i $influx_time"
+
 fi
