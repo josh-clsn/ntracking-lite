@@ -43,25 +43,3 @@ Influx can be accesed on ```<IP Address>:8086```
 
 Grafana can be accesed on ```<IP Address>:3000```
 
-# Connecting Grafana to influx
-
-1. Log into Grafana
-2. Select add new data source
-3. Search for InfluxDB
-4. Enter details as below using the ip or hostname and port of the fluxdb install you are connecting to
-5. click safe and test and if it goes green InfluxDB and Grafana are now connected.
-![image](https://github.com/safenetforum-community/NTracking/assets/25412853/99c5c77b-7261-43ba-9a6f-11e0d4596425)
-
-
-
-# Import Grafana dashboard
-
-after connecting Grafana and InfluxDB select the option to import Dashboard
-
-1. copy the Dashboard json from 
-https://github.com/safenetforum-community/NTracking/blob/main/NTracking%20Dashboard
-3. paste it into the import dashboard window and save
-4. refresh Grafana and load the dashboard
-
-# after NTracking is set up start some nodes with safe node manager and track ther progree in Grafana.
-
