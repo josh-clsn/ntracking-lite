@@ -4,9 +4,6 @@
 export PATH=$PATH:$HOME/.local/bin
 base_dir="/var/safenode-manager/services"
 
-# Define the time 2 hours ago
-time_2hrs_ago=$(date --date="2 hours ago" +"%Y-%m-%dT%H:%M:%S")
-
 # Current time for influx database entries
 influx_time=$(date +%s%N | awk '{printf "%d0000000000\n", $0 / 10000000000}')
 time_min=$(date +"%M")
@@ -73,12 +70,13 @@ echo "nodes_totals rewards=$total_rewards_balance,nodes_running=${total_nodes_ru
 latency=$(ping -c 4 8.8.8.8 | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 echo "nodes latency=$latency $influx_time"
 
-# Grep for "us as BAD" in the logs from the last 2 hours and count occurrences
-bad_occurrences=$(grep -r "us as BAD" /var/log/safenode/ | grep "$(date --date="2 hours ago" +%Y-%m-%dT)" | wc -l)
+# Grep for "us as BAD" in the logs and count all occurrences
+bad_occurrences=$(grep -r "us as BAD" /var/log/safenode/ | wc -l)
 echo "nodes_errors us_as_BAD_count=${bad_occurrences}i $influx_time"
 
 # Calculate total storage of the node services folder and print to InfluxDB
 total_disk=$(du -s "$base_dir" | cut -f1 | awk '{printf "%.0f\n", $1/1024}')
 echo "nodes_totals total_disk=${total_disk}i $influx_time"
+
 
 
