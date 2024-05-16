@@ -112,8 +112,6 @@ fi
 
 sudo env "PATH=$PATH" safenode-manager start --interval $DELAY_BETWEEN_NODES | tee /tmp/influx-resources/nodemanager_output & disown
 
-##sudo env "PATH=$PATH" safenode-manager add --node-port "$NODE_PORT_FIRST"-$(($NODE_PORT_FIRST+$NUMBER_NODES-1))  --count "$NUMBER_NODES"  --peer "$PEER"  --url http://safe-logs.ddns.net/safenode.tar.gz
-
 
 ######################################################################################################################## Upgrade Client to Latest
 elif [[ "$SELECTION" == "2" ]]; then
@@ -130,12 +128,8 @@ elif [[ "$SELECTION" == "3" ]]; then
 
 sudo pkill -e safe
 
-# stop nodes
-# nuke safe node manager services 1 - 100 untill nuke comand exists
-
 for i in {1..100}
 do
- # your-unix-command-here
  sudo systemctl disable --now safenode$i
 done
 
