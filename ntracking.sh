@@ -508,7 +508,7 @@ echo "*/15 * * * * $USER /usr/bin/mkdir -p /tmp/influx-resources && /bin/bash /u
 sudo rm /usr/bin/influx-resources.sh*
 
 # download latest script from git hub
-sudo wget -P /usr/bin  https://raw.githubusercontent.com/safenetforum-community/NTracking/main/influx-resources.sh
+sudo wget -P /usr/bin  https://raw.githubusercontent.com/javages/ntracking/main/influx-resources.sh
 
 #make executable
 sudo chmod u+x /usr/bin/influx-resources.sh
