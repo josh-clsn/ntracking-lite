@@ -8,7 +8,7 @@ base_dir="/var/safenode-manager/services"
 time_2hrs_ago=$(date --date="2 hours ago" +"%Y-%m-%d %H:%M:%S")
 
 # Current time for influx database entries
-influx_time="$(date +%s%N | awk '{printf "%d0000000000\n", $0 / 10000000000}')"
+influx_time=$(date +%s%N | awk '{printf "%d0000000000\n", $0 / 10000000000}')
 time_min=$(date +"%M")
 
 # Counters
@@ -61,26 +61,23 @@ for dir in "$base_dir"/*; do
     fi
 done
 
-# Sort
+# Sort and print node details for InfluxDB
 for num in $(echo "${!node_details_store[@]}" | tr ' ' '\n' | sort -n); do
     echo "${node_details_store[$num]}"
 done
 
-# Output
-echo "nodes_totals rewards=$total_rewards_balance,nodes_running="$total_nodes_running"i,nodes_killed="$total_nodes_killed"i $influx_time"
+# Output total nodes and rewards
+echo "nodes_totals rewards=$total_rewards_balance,nodes_running=${total_nodes_running}i,nodes_killed=${total_nodes_killed}i $influx_time"
 
-# Latency
-latency=$(ping -c 4 8.8.8.8 | tail -1| awk '{print $4}' | cut -d '/' -f 2)
+# Measure latency and print to InfluxDB
+latency=$(ping -c 4 8.8.8.8 | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 echo "nodes latency=$latency $influx_time"
 
 # Grep for "us as BAD" in the logs from the last 2 hours and count occurrences
 bad_occurrences=$(awk -v d1="$time_2hrs_ago" -v d2="$(date +"%Y-%m-%d %H:%M:%S")" '$0 >= d1 && $0 <= d2' /var/log/safenode/* | grep "us as BAD" | wc -l)
+echo "nodes_errors us_as_BAD_count=${bad_occurrences}i $influx_time"
 
-# Print the result to influx
-echo "nodes_errors us_as_BAD_count="$bad_occurrences"i $influx_time"
+# Calculate total storage of the node services folder and print to InfluxDB
+total_disk=$(du -s "$base_dir" | cut -f1 | awk '{printf "%.0f\n", $1/1024}')
+echo "nodes_totals total_disk=${total_disk}i $influx_time"
 
-# Calculate total storage of the node services folder
-total_disk=$(echo "scale=0;("$(du -s "$base_dir" | cut -f1)")/1024" | bc)
-echo "nodes_totals total_disk="$total_disk"i $influx_time"
-
-fi
