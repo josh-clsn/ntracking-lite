@@ -499,7 +499,7 @@ exit 0
 fi
 
 #setup cron job for resources
-echo "*/15 * * * * $USER /usr/bin/mkdir -p /tmp/influx-resources && /bin/bash /usr/bin/influx-resources.sh > /tmp/influx-resources/influx-resources" | sudo tee /etc/cron.d/influx_resources
+echo "*/15 * * * * $USER /usr/bin/mkdir -p /tmp/influx-resources && sudo -E /bin/bash /usr/bin/influx-resources.sh > /tmp/influx-resources/influx-resources 2>&1" | sudo tee /etc/cron.d/influx_resources
 
 
 ################################################################### download script to gather node resources
@@ -606,8 +606,8 @@ elif [[ "$SELECTION" == "5" ]]; then
 #InfluxDB2
  yes y | sudo ufw delete $(sudo ufw status numbered |(grep 'influxdb2'|awk -F"[][]" '{print $2}')) && yes y | sudo ufw delete $(sudo ufw status numbered |(grep 'influxdb2'|awk -F"[][]" '{print $2}'))
 
-# remove telegraf infux-resources script and cron job
-sudo rm /etc/cron.d/infux-resources
+# remove telegraf influx-resources script and cron job
+sudo rm /etc/cron.d/influx-resources
 sudo apt-get remove telegraf
 sudo rm /usr/bin/infux-resources.sh
 
