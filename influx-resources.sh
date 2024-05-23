@@ -20,7 +20,7 @@ declare -A node_numbers
 declare -A node_details_store
 
 # Fetch node overview from node-manager
-echo "$SUDO_PASSWORD" | sudo -E -S $HOME/.local/bin/safenode-manager status --details > /tmp/influx-resources/nodes_overview
+$HOME/.local/bin/safenode-manager status --details > /tmp/influx-resources/nodes_overview
 if [ $? -ne 0 ]; then
     echo "Failed to get node overview from safenode-manager."
     exit 1
