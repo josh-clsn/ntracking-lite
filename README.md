@@ -14,7 +14,7 @@ su - u <username>
 
 # to Run
 
-```bash <(curl -s https://raw.githubusercontent.com/javages/ntracking/main/ntracking.sh)```
+```bash <(curl -s https://raw.githubusercontent.com/javages/ntracking-lite/main/ntracking.sh)```
 
 this script will run a whip tail menu script giving you the options to :
 
