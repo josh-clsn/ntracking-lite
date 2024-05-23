@@ -19,8 +19,15 @@ declare -A dir_peer_ids
 declare -A node_numbers
 declare -A node_details_store
 
-# Fetch node overview from node-manager
-$HOME/.local/bin/safenode-manager status --details > /tmp/influx-resources/nodes_overview
+
+# Ensure the output directory exists
+mkdir -p /tmp/influx-resources
+
+# Change to a valid directory
+cd /tmp || exit 1
+
+# Use sudo -E -S to preserve the environment and read from standard input
+echo "$SUDO_PASSWORD" | sudo -E -S $HOME/.local/bin/safenode-manager status --details > /tmp/influx-resources/nodes_overview 2>&1
 if [ $? -ne 0 ]; then
     echo "Failed to get node overview from safenode-manager."
     exit 1
@@ -77,6 +84,3 @@ echo "nodes_errors us_as_BAD_count=${bad_occurrences}i $influx_time"
 # Calculate total storage of the node services folder and print to InfluxDB
 total_disk=$(du -s "$base_dir" | cut -f1 | awk '{printf "%.0f\n", $1/1024}')
 echo "nodes_totals total_disk=${total_disk}i $influx_time"
-
-
-
