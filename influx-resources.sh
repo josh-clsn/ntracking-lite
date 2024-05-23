@@ -1,7 +1,5 @@
 #!/bin/bash
 
-SUDO_PASSWORD=138garfield
-
 # Environment setup
 export PATH=$PATH:$HOME/.local/bin
 base_dir="/var/safenode-manager/services"
