@@ -499,7 +499,7 @@ exit 0
 fi
 
 #setup cron job for resources
-(crontab -l 2>/dev/null; echo "*/10 * * * * $USER /usr/bin/mkdir -p /tmp/influx-resources && sudo -E /bin/bash /usr/bin/influx-resources.sh > /tmp/influx-resources/influx-resources 2>&1") | crontab -
+#todo
 
 
 ################################################################### download script to gather node resources
